@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlayerTiled : MonoBehaviour {
 
@@ -19,6 +20,8 @@ public class PlayerTiled : MonoBehaviour {
     public float walkSpeed = 3f;
 
     public bool isAllowedToMove = true;
+
+	public Grid grid;
 
     void Start()
     {
@@ -108,6 +111,8 @@ public class PlayerTiled : MonoBehaviour {
         }
 
         isMoving = false;
+		Vector3 worldPoint = entity.position;
+		Debug.Log(grid.WorldToCell(worldPoint));
         yield return 0;
     }
 }
