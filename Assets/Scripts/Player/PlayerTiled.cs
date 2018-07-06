@@ -12,6 +12,12 @@ public class PlayerTiled : MonoBehaviour {
     bool isMoving = false;
     float time;
 
+    bool colliding = false;
+    bool collidingRight = false;
+    bool collidingLeft = false;
+    bool collidingUp = false;
+    bool collidingDown = false;
+
     public Sprite spriteUp;
     public Sprite spriteRight;
     public Sprite spriteDown;
@@ -73,8 +79,21 @@ public class PlayerTiled : MonoBehaviour {
 
 		ChangeSprite();
 
-		StartCoroutine(Move(transform));
-	}
+        if(!colliding)
+		    StartCoroutine(Move(transform));
+        else
+        {
+            if (collidingRight && currentDir == Direction.Right)
+                input.x = 0;
+            if (collidingLeft && currentDir == Direction.Left)
+                input.x = 0;
+            if (collidingUp && currentDir == Direction.Up)
+                input.y = 0;
+            if (collidingDown && currentDir == Direction.Down)
+                input.y = 0;
+            StartCoroutine(Move(transform));
+        }
+    }
 
 	public void ChangeSprite()
 	{
@@ -114,6 +133,24 @@ public class PlayerTiled : MonoBehaviour {
 		Vector3 worldPoint = entity.position;
 		Debug.Log(grid.WorldToCell(worldPoint));
         yield return 0;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        colliding = true;
+        if (currentDir == Direction.Right)
+            collidingRight = true;
+        else if (currentDir == Direction.Left)
+            collidingLeft = true;
+        else if (currentDir == Direction.Up)
+            collidingUp = true;
+        else if (currentDir == Direction.Down)
+            collidingDown = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        colliding = false;
     }
 }
 
